@@ -5,12 +5,14 @@
  */
 package servlets;
 
-import domain.User;
+import domain.*;
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -21,7 +23,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getParameter("quit") == null) {
+        if (request.getParameter("logout") == null) {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
     }
@@ -31,13 +33,23 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        if ((request.getParameter("username") == "") || (request.getParameter("password")) == "") {
-            User user = new User(username, password);
-            user.setUsername(username);
-            user.setPassword(password);
-            request.setAttribute("user", user);
+        if ((((username == null) || (username.equals(""))) || ((password == null) || (password.equals(""))))) {
+            request.setAttribute("error", "Invalid Username or Password.");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            return;
         }
-
+        
+        UserService us = new UserService();
+        User u = us.login(username, password);
+        
+        if(u != null){
+            HttpSession hs = request.getSession();
+            hs.setAttribute("username", u.getUsername());
+            if (request.getParameter("remember") != null){
+                Cookie c = new Cookie("username", u.getUsername());
+                c.setMaxAge(60*60*24*30);
+                c.setPath("/");
+            }
+        }
     }
 }

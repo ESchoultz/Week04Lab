@@ -4,19 +4,21 @@
  * and open the template in the editor.
  */
 package domain;
+
 import java.io.Serializable;
 
 /**
  *
  * @author 669385
  */
+public class User implements Serializable {
 
-public class User implements Serializable{
     String username;
     String password;
 
-    public User(){
+    public User() {
     }
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
@@ -37,6 +39,5 @@ public class User implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
+
 }
