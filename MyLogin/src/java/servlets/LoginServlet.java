@@ -34,7 +34,8 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         if ((((username == null) || (username.equals(""))) || ((password == null) || (password.equals(""))))) {
-            request.setAttribute("error", "Invalid Username or Password.");
+            request.setAttribute("username", username);
+            request.setAttribute("error", "Invalid Username or Password!");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
         }
@@ -49,7 +50,13 @@ public class LoginServlet extends HttpServlet {
                 Cookie c = new Cookie("username", u.getUsername());
                 c.setMaxAge(60*60*24*30);
                 c.setPath("/");
+                response.addCookie(c);
             }
+            response.sendRedirect("home");
+        }else {
+            request.setAttribute("error", "Invalid Username or Password!");
+            request.setAttribute("username", username);
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
     }
 }
