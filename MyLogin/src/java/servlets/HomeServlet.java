@@ -28,7 +28,6 @@ public class HomeServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -38,19 +37,19 @@ public class HomeServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-     @Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession hs = request.getSession();
         String username = (String) hs.getAttribute("username");
-        
-        if(username != null){
+
+        if (username != null) {
             request.setAttribute("username", username);
             getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         } else {
             response.sendRedirect("login");
         }
-}
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -63,17 +62,6 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
