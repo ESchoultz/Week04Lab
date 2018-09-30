@@ -13,11 +13,16 @@
     </head>
     <body>
         <h1>Remember Me Login Page</h1>
-        <form action="login" method="POST">
+        <div>
+            <form action="login" method="POST">
             User Name: <input type="text" name="username" value="${username}"><br>
             Password: <input type="password" name="password"><br>
             <input type="checkbox" name="remember">Remember Me<br>
-            <input type="submit" value="Login" name="submit" ${checked}>
-</form>
+            <input type="submit" value="Login" name="submit">
+        </form>
+        </div>
+        <div>
+            ${error}
+        </div>
     </body>
 </html>

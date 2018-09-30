@@ -23,9 +23,15 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (request.getParameter("logout") == null) {
+
+        HttpSession hs = request.getSession();
+        
+        if (request.getParameter("logout") != null) {
+            hs.invalidate();
+            request.setAttribute("error", "Successfully Logged Out!");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-        }
+        } 
+        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
 
     @Override
@@ -39,24 +45,34 @@ public class LoginServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
         }
-        
+
         UserService us = new UserService();
         User u = us.login(username, password);
-        
-        if(u != null){
+
+        if (u != null) {
             HttpSession hs = request.getSession();
             hs.setAttribute("username", u.getUsername());
-            if (request.getParameter("remember") != null){
+            if (request.getParameter("remember") != null) {
                 Cookie c = new Cookie("username", u.getUsername());
-                c.setMaxAge(60*60*24*30);
+                c.setMaxAge(60 * 60 * 24 * 30);
                 c.setPath("/");
                 response.addCookie(c);
             }
             response.sendRedirect("home");
-        }else {
+        } else {
             request.setAttribute("error", "Invalid Username or Password!");
             request.setAttribute("username", username);
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
     }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 }
